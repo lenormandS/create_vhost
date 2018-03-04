@@ -19,7 +19,7 @@ do
 			readonly IP_VALUE="${OPTARG}"
 			;;
 		d)
-			echo "THIS ARG IS POWERFULL"
+			deleteFolderConf "${OPTARG}"
 			exit
 			;;
 		h)

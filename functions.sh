@@ -23,7 +23,7 @@ create_new_conf(){
 			EXTENSION_DEFAULT="${EXTENSION_SUFFIX}"
 		fi
 		touch "${PATH_FOLDER}/index.${EXTENSION_DEFAULT}"
-		echo "IT'S WORK" >> "${PATH_FOLDER}/index.${EXTENSION_DEFAULT}"
+		echo "IT'S WORK : ${2}" >> "${PATH_FOLDER}/index.${EXTENSION_DEFAULT}"
 		include_conf "${2}"
 		update_host "${2}"
 		reload_apache "${2}"
@@ -80,7 +80,6 @@ sudo echo "$conf" >> "${APACHE_SITES}/${1}.conf"
 
 
 update_host(){
-	echo "${HOSTS_PATH}"
 	if [ ! -z "${IP_VALUE}" ];then
 		DEFAULT_IP="${IP_VALUE}"
 	fi
@@ -95,7 +94,6 @@ reload_apache(){
 		y|Y|"")
 			a2ensite "${1}.conf"
 			service apache2 reload
-			service apache2 status
 			exit
 			;;
 		n|N)
@@ -107,4 +105,24 @@ reload_apache(){
 			exit
 			;;
 	esac
+exit
+}
+
+deleteFolderConf(){
+	for variable in $(ls "${APACHE_SITES}" | grep "${@}");do
+		echo "\033[1;31m ($#) CONF FOUND : \033[4;32m${variable}\033[0m \033[0m"
+	done
+	if [ ! -n "${variable}" ];then
+		echo "NO CONFIG FOUND FOR : ${@} - ABORT"
+		exit
+	else
+		echo "CONFIG TO DELETE : (type name)"
+		read answer
+		test=$(find "${HOSTS_PATH}" -type f | xargs grep -Hn "${answer}" | cut -c12-12)
+		sed -i "${test} d" "${HOSTS_PATH}"
+		rm -rf "${SITES_PATH}/${answer}" && rm -rf "${APACHE_SITES}/${answer}.conf"
+		a2dissite "${answer}.conf"
+		service apache2 restart
+	fi
+
 }
