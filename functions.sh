@@ -5,7 +5,13 @@ version(){
 }
 
 usage(){
-usage="$(basename $0) -c <name> [-e <extension>] [-p <port>] [-i <ip adress>]"
+usage="$(basename $0) -c <name> [-e <extension>] [-p <port>] [-i <ip adress>]
+	-c	Create new configuration and folder
+	-e	Extension of index [ default : HTML ]
+	-p	Port of VirtualHost [ default : 80 ]
+	-i	IP address of VirtualHost [ default : 127.0.0.1 ]
+	-d	Delete conf file
+"
 
 echo "$usage"
 }
