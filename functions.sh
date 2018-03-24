@@ -17,23 +17,28 @@ echo "$usage"
 }
 
 create_new_conf(){
-	local PATH_FOLDER="${SITES_PATH}/${2}"
-	if [ -d "${PATH_FOLDER}" ]
-	then
-		echo "FOLDER EXIST - ABORT"
-		exit
-	else
-		mkdir "${PATH_FOLDER}"
-		chmod -R 777 "${PATH_FOLDER}"
-		if [ ! -z "${EXTENSION_SUFFIX}" ];then
-			EXTENSION_DEFAULT="${EXTENSION_SUFFIX}"
-		fi
-		touch "${PATH_FOLDER}/index.${EXTENSION_DEFAULT}"
-		echo "IT'S WORK : ${2}" >> "${PATH_FOLDER}/index.${EXTENSION_DEFAULT}"
-		include_conf "${2}"
-		update_host "${2}"
-		reload_apache "${2}"
-	fi
+        if [ whoami != "root" ]
+        then
+            echo "Please, use as root"
+        else
+            local PATH_FOLDER="${SITES_PATH}/${2}"
+            if [ -d "${PATH_FOLDER}" ]
+            then
+                    echo "FOLDER EXIST - ABORT"
+                    exit
+            else
+                    mkdir "${PATH_FOLDER}"
+                    chmod -R 777 "${PATH_FOLDER}"
+                    if [ ! -z "${EXTENSION_SUFFIX}" ];then
+                            EXTENSION_DEFAULT="${EXTENSION_SUFFIX}"
+                    fi
+                    touch "${PATH_FOLDER}/index.${EXTENSION_DEFAULT}"
+                    echo "IT'S WORK : ${2}" >> "${PATH_FOLDER}/index.${EXTENSION_DEFAULT}"
+                    include_conf "${2}"
+                    update_host "${2}"
+                    reload_apache "${2}"
+            fi
+        fi
 }
 
 include_conf(){
@@ -81,7 +86,7 @@ conf="
     </Directory>
 </VirtualHost>
 "
-sudo echo "$conf" >> "${APACHE_SITES}/${1}.conf"
+echo "$conf" >> "${APACHE_SITES}/${1}.conf"
 }
 
 

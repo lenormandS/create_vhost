@@ -7,7 +7,7 @@ while getopts c:e:p:i:d:hv OPT
 do
 	case "${OPT}" in
 		c)
-			readonly DIR_NAME= "${OPTARG}"
+                        readonly DIR_NAME="${OPTARG}"
 			;;
 		e)
 			readonly EXTENSION_SUFFIX="${OPTARG}"
